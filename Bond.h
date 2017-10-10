@@ -4,12 +4,13 @@
 
 class Bond {
  public:
+  Atom atoms[2];
+
   Bond(Atom i, Atom j) {
-    atom_i = i;
-    atom_j = j;
+    atoms[0] = i;
+    atoms[1] = j;
   };
 
-  Atom atom_i, atom_j;
   double b0, kb;
 };
 
