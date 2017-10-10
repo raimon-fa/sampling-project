@@ -4,38 +4,47 @@
 #include <sstream>
 #include <string>
 
-ForceFields::ForceFields(std::string FF_folder, Molecule molecule) {
-  bond_constants = initialize_bond_constants(FF_folder, molecule);
+ForceFields::ForceFields(std::string bounded_FF_file,
+                         std::string unbounded_FF_file, Molecule molecule) {
+  bond_constants = initialize_bond_constants(bounded_FF_file, molecule);
   // angle_constants = initialize_angle_constants();
   // dihedral_constants = initialize_dihedral_constants();
   // long_range_constants = initialize_long_range_constants();
 }
 
-vector<double> ForceFields::initialize_bond_constants(std::string FF_folder,
-                                                      Molecule molecule) {
-  std::ifstream infile(molecule_file);
+std::vector<std::vector<double>> ForceFields::initialize_bond_constants(
+    std::string bounded_FF_file, Molecule molecule) {
+  std::ifstream infile(bounded_FF_file);
   std::string line;
-  // go to line starting with word [ atoms ]
+  // go to line starting with word [ bondtypes ]
   while (getline(infile, line)) {
-    if (line == "[ atoms ]") break;
+    if (line == "[ bondtypes ]") break;
   }
-  // skipe two lines
+  // skipe one lines
   std::getline(infile, line);
-  std::getline(infile, line);
-  // read atoms
-  int i = 0;
-  while (std::getline(infile, line)) {
+  // read bond energy constants
+  streampos oldpos = infile.tellg();  // stores the position
+  for (int i = 0; i < molecule.num_bonds; ++i) {
     if (line.empty()) break;
 
-    std::istringstream iss(line);
-    std::string semicolon;
-    Atom new_atom;
-    atoms.push_back(new_atom);
+    atom_type1 = molecule.bonds.atoms[0].type;
+    atom_type2 = molecule.bonds.atoms[1].type;
 
-    iss >> atoms[i].index >> atoms[i].type >> atoms[i].resnr >>
-        atoms[i].residue >> atoms[i].element >> atoms[i].cgnr >>
-        atoms[i].charge >> semicolon;
-    i++;
+    std::istringstream iss(line);
+    std::string atom_type1, atom_type2;
+
+    int func;
+    double b0, kb;
+
+    iss >> atom_type1p, atom_type2p, fun, b0, kb;
+
+    if (((atom_type1 == atom_type1p) && (atom_type2 == atom_type2p)) ||
+        ((atom_type1 == atom_type2p) && (atom_type2 == atom_type1p))) {
+      bond_constants[i][0] = b0;
+      bond_constants[i][0] = kb;
+      bond_constants = infile.seekg(oldpos);
+    }
   }
-  return atoms;
+
+  return bond_constants;
 }

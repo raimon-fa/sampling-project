@@ -8,15 +8,18 @@
 
 class ForceFields {
  private:
-  std::vector<double> initialize_bond_constants();
+  std::vector<std::vector<double>> initialize_bond_constants();
   std::vector<double> initialize_angle_constants();
   std::vector<double> initialize_dihedral_constants();
   std::vector<double> initialize_long_range_constants();
 
  public:
   // Constructor: reads FF files and generates arrays
-  ForceFields(std::string, Molecule);
-  string std::vector<double> bond_constants;
+  ForceFields(std::string, std::string, Molecule);
+  std::string FF_folder;
+  Molecule molecule;
+
+  std::vector<double> bond_constants;
   std::vector<double> angle_constants;
   std::vector<double> dihedral_constants;
   std::vector<double> long_range_constants;
