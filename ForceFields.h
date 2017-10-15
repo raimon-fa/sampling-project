@@ -1,30 +1,33 @@
 #ifndef FORCE_FIELDS_H
 #define FORCE_FIELDS_H
-
+#include <array>
 #include <string>
 #include "Atom.h"
 #include "Bond.h"
 #include "Molecule.h"
-
 class ForceFields {
- private:
-  std::vector<std::vector<double>> initialize_bond_constants();
-  std::vector<double> initialize_angle_constants();
-  std::vector<double> initialize_dihedral_constants();
-  std::vector<double> initialize_long_range_constants();
-
  public:
   // Constructor: reads FF files and generates arrays
-  ForceFields(std::string, std::string, Molecule);
-  std::string FF_folder;
+ public:
+  ForceFields(std::string FFbonded_file, std::string FFunbonded_file,
+              Molecule &);
+
+  std::string FFbonded_file;
+  std::string FFunbonded_file;
+
   Molecule molecule;
 
-  std::vector<double> bond_constants;
-  std::vector<double> angle_constants;
-  std::vector<double> dihedral_constants;
-  std::vector<double> long_range_constants;
+  std::vector<std::vector<double>> bond_constants;
+  std::vector<std::vector<double>> angle_constants;
+  std::vector<std::vector<double>> dihedral_constants;
+  std::vector<std::vector<double>> long_range_constants;
 
   // double energy(Configuration molecule_conf);
+ private:
+  std::vector<std::vector<double>> initialize(std::string what);
+  // std::vector<double> initialize_angle_constants();
+  // std::vector<double> initialize_dihedral_constants();
+  // std::vector<double> initialize_long_range_constants();
 };
 
 #endif  // FORCE_FIELDS_H

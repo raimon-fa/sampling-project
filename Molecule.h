@@ -19,6 +19,7 @@ class Molecule {
   std::vector<Dihedral> initialize_dihedrals(std::string);
 
  public:
+  Molecule();
   Molecule(std::string);
   std::vector<Atom> atoms;
   std::vector<Bond> bonds;

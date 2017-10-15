@@ -4,14 +4,16 @@
 
 class Bond {
  public:
-  Atom atoms[2];
+  // Atom atoms[2];
+  std::vector<Atom> atoms;
 
   Bond(Atom i, Atom j) {
-    atoms[0] = i;
-    atoms[1] = j;
+    atoms = {i, j};
+    // atoms[0] = i;
+    // atoms[1] = j;
   };
 
-  double b0, kb;
+  double ff_b0, ff_kb;
 };
 
 #endif  // BOND_H

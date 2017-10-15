@@ -4,11 +4,12 @@
 
 class Angle {
  public:
-  Atom& atoms[3];
+  std::vector<Atom> atoms;
   Angle(Atom i, Atom j, Atom k) {
-    atoms[0] = i;
-    atoms[1] = j;
-    atoms[2] = k;
+    atoms = {i, j, k};
+    // atoms[0] = i;
+    // atoms[1] = j;
+    // atoms[2] = k;
   };
 };
 

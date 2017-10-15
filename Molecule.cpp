@@ -3,11 +3,15 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+#include "GeneralFunctions.h"
 /**
  *  @brief Generate the vectors containing the atoms, bonds,.. of
  * the molecule.
  */
+Molecule::Molecule() {}
+
 Molecule::Molecule(std::string molecule_file) {
+  GeneralFunctions::check_if_file_exists(molecule_file);
   atoms = initialize_atoms(molecule_file);
   bonds = initialize_bonds(molecule_file);
   angles = initialize_angles(molecule_file);
@@ -23,9 +27,7 @@ std::vector<Atom> Molecule::initialize_atoms(std::string molecule_file) {
   std::ifstream infile(molecule_file);
   std::string line;
   // go to line starting with word [ atoms ]
-  while (getline(infile, line)) {
-    if (line == "[ atoms ]") break;
-  }
+  GeneralFunctions::jump_to("[ atoms ]", infile);
   // skipe two lines
   std::getline(infile, line);
   std::getline(infile, line);
@@ -46,13 +48,12 @@ std::vector<Atom> Molecule::initialize_atoms(std::string molecule_file) {
   }
   return atoms;
 }
+
 std::vector<Bond> Molecule::initialize_bonds(std::string molecule_file) {
   std::ifstream infile(molecule_file);
   std::string line;
   // go to line starting with word [ bonds ]
-  while (getline(infile, line)) {
-    if (line == "[ bonds ]") break;
-  }
+  GeneralFunctions::jump_to("[ bonds ]", infile);
   // skipe one line
   std::getline(infile, line);
   // read bonds
@@ -68,13 +69,12 @@ std::vector<Bond> Molecule::initialize_bonds(std::string molecule_file) {
   }
   return bonds;
 }
+
 std::vector<Angle> Molecule::initialize_angles(std::string molecule_file) {
   std::ifstream infile(molecule_file);
   std::string line;
   // go to line starting with word [ angles ]
-  while (getline(infile, line)) {
-    if (line == "[ angles ]") break;
-  }
+  GeneralFunctions::jump_to("[ angles ]", infile);
   // skipe one line
   std::getline(infile, line);
   // read angles
@@ -90,14 +90,13 @@ std::vector<Angle> Molecule::initialize_angles(std::string molecule_file) {
   }
   return angles;
 }
+
 std::vector<Dihedral> Molecule::initialize_dihedrals(
     std::string molecule_file) {
   std::ifstream infile(molecule_file);
   std::string line;
   // go to line starting with word [ angles ]
-  while (getline(infile, line)) {
-    if (line == "[ dihedrals ]") break;
-  }
+  GeneralFunctions::jump_to("[ dihedrals ]", infile);
   // skipe one line
   std::getline(infile, line);
   // read angles
